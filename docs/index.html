@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@10.1.1/assets/chessground.base.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@10.1.1/assets/chessground.brown.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@10.1.1/assets/chessground.alpha.css">
-  <script type="module" crossorigin src="/cc1/assets/index-JoXGcsZT.js"></script>
-  <link rel="stylesheet" crossorigin href="/cc1/assets/index-1sBJSWK2.css">
+  <script type="module" crossorigin src="/cc1/assets/index-CEBo5tj1.js"></script>
+  <link rel="stylesheet" crossorigin href="/cc1/assets/index-BisqJWre.css">
 </head>
 <body>
 <div class="application">
@@ -68,7 +68,6 @@
     </div>
 
     <div class="hint-control">
-        <button id="hint-button" type="button" class="hint-toggle" style="display:none;">Afficher l'indice</button>
         <img id="hint-diagram" class="hint-image" alt="Indice" style="display:none;">
     </div>
 
@@ -77,11 +76,12 @@
 
         <div class="navigation">
             <button id="restart" class="nav-square" title="Recommencer" aria-label="Recommencer"><img src="/cc1/images/restart.svg" alt="Recommencer"></button>
-            <button id="first" class="nav-square" title="Première position" aria-label="Première position">⏮</button>
-            <button id="previous" class="nav-square" title="Coup précédent" aria-label="Coup précédent">◀</button>
-            <button id="next" class="nav-square" title="Coup suivant" aria-label="Coup suivant">▶</button>
-            <button id="last" class="nav-square" title="Dernière position" aria-label="Dernière position">⏭</button>
-            <button id="flip" class="nav-square flip-button" title="Retourner l'échiquier" aria-label="Retourner l'échiquier"><span class="flip-triangle-up"></span><span class="flip-triangle-down"></span></button>
+            <button id="first" class="nav-square" title="Première position" aria-label="Première position"><img src="/cc1/images/to_start.svg" alt="Première position"></button>
+            <button id="previous" class="nav-square" title="Coup précédent" aria-label="Coup précédent"><img src="/cc1/images/backward.svg" alt="Coup précédent"></button>
+            <button id="next" class="nav-square" title="Coup suivant" aria-label="Coup suivant"><img src="/cc1/images/forward.svg" alt="Coup suivant"></button>
+            <button id="last" class="nav-square" title="Dernière position" aria-label="Dernière position"><img src="/cc1/images/to_end.svg" alt="Dernière position"></button>
+            <button id="flip" class="nav-square" title="Retourner l'échiquier" aria-label="Retourner l'échiquier"><img src="/cc1/images/flip.svg" alt="Retourner l'échiquier"></button>
+            <button id="hint-button" type="button" class="nav-square" style="display:none;" title="Afficher l'indice" aria-label="Afficher l'indice"><img id="hint-icon" src="./images/hint.svg" alt="Afficher l'indice"></button>
         </div>
 
         <div id="moves"></div>
