@@ -5321,40 +5321,30 @@ function getSelectedPosition() {
 
 function resetHintUI() {
 
-    const button =
-        document.getElementById(
-            'hint-button'
-        );
-
-    const image =
-        document.getElementById(
-            'hint-diagram'
-        );
+    const button = document.getElementById('hint-button');
+    const icon = document.getElementById('hint-icon');
+    const image = document.getElementById('hint-diagram');
 
     image.style.display = 'none';
     image.removeAttribute('src');
 
     button.disabled = false;
-    button.style.display = 'inline-block';
-    button.textContent = "Afficher l'indice";
+    button.style.display = 'inline-flex';
+    button.title = "Afficher l'indice";
+    button.setAttribute('aria-label', "Afficher l'indice");
+
+    icon.src = './images/hint.svg';
+    icon.alt = "Afficher l'indice";
 
 }
 
 
 function toggleHint() {
 
-    const button =
-        document.getElementById(
-            'hint-button'
-        );
-
-    const image =
-        document.getElementById(
-            'hint-diagram'
-        );
-
-    const position =
-        getSelectedPosition();
+    const button = document.getElementById('hint-button');
+    const icon = document.getElementById('hint-icon');
+    const image = document.getElementById('hint-diagram');
+    const position = getSelectedPosition();
 
     if (!position) {
         return;
@@ -5373,21 +5363,26 @@ function toggleHint() {
         image.onerror = () => {
             image.style.display = 'none';
             image.removeAttribute('src');
-            button.textContent =
-                "Pas d'indice pour cette position";
+            button.title = "Pas d'indice pour cette position";
+            button.setAttribute('aria-label', "Pas d'indice pour cette position");
             button.disabled = true;
         };
 
-        image.src =
-            './images/hints/' + position.id + '.png';
+        image.src = './images/hints/' + position.id + '.png';
 
-        button.textContent = "Masquer l'indice";
+        button.title = "Masquer l'indice";
+        button.setAttribute('aria-label', "Masquer l'indice");
+        icon.src = './images/no_hint.svg';
+        icon.alt = "Masquer l'indice";
 
     } else {
 
         image.style.display = 'none';
         image.removeAttribute('src');
-        button.textContent = "Afficher l'indice";
+        button.title = "Afficher l'indice";
+        button.setAttribute('aria-label', "Afficher l'indice");
+        icon.src = './images/hint.svg';
+        icon.alt = "Afficher l'indice";
 
     }
 

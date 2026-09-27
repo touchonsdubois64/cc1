@@ -65,8 +65,6 @@ h1 { margin:0 0 25px; text-align:center; font-size:1.8rem; color:#4a3022; }
 .nav-square:disabled { opacity:.4; cursor:default; }
 #restart { font-size:1.45rem; font-weight:bold; }
 .flip-button { flex-direction:column; gap:3px; }
-.flip-triangle-up { width:0; height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:9px solid #49382c; }
-.flip-triangle-down { width:0; height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-top:9px solid #49382c; }
 #moves { width:100%; min-height:70px; margin:5px auto 18px; padding:14px 16px; border:1px solid #c7b8a9; border-radius:7px; background:#fff; line-height:1.9; font-size:1rem; }
 .move-number { font-weight:bold; color:#5b4636; }
 .move-text { display:inline; margin:0; padding:1px 2px; border:none; border-radius:3px; background:transparent; font-family:inherit; font-size:inherit; cursor:pointer; }
@@ -238,6 +236,11 @@ h1 { margin:0 0 25px; text-align:center; font-size:1.8rem; color:#4a3022; }
     width: 60%;
     height: 60%;
     object-fit: contain;
+}
+
+#hint-button img {
+    width: 85%;
+    height: 85%;
 }
 
 /* ==================================================
@@ -742,25 +745,6 @@ h1 { margin:0 0 25px; text-align:center; font-size:1.8rem; color:#4a3022; }
     margin-top: 12px;
 }
 
-.hint-toggle {
-    padding: 6px 14px;
-    border: 1px solid #b8a68f;
-    border-radius: 6px;
-    background: #f4ede2;
-    color: #2b2520;
-    font-family: inherit;
-    font-size: .95rem;
-    cursor: pointer;
-}
-
-.hint-toggle:hover {
-    background: #ece3d8;
-}
-
-.hint-toggle:disabled {
-    cursor: default;
-    opacity: .7;
-}
 
 .hint-image {
     max-width: 100%;
