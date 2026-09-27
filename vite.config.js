@@ -4,6 +4,6 @@ export default defineConfig({
     base: "/cc1/",
     build: {
         outDir: "docs",
-        emptyOutDir: false
+        emptyOutDir: true
     }
 });
