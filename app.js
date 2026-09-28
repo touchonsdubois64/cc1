@@ -5315,74 +5315,266 @@ function getSelectedPosition() {
 // Exemple : la position id "ebersz-01" doit avoir
 // son image dans images/hints/ebersz-01.png
 //
-// Si l'image n'existe pas encore pour une position,
-// le bouton l'indique et se désactive proprement.
+// Si l'image n'existe pas pour une position,
+// le bouton est automatiquement désactivé.
 // ==================================================
 
 function resetHintUI() {
 
-    const button = document.getElementById('hint-button');
-    const icon = document.getElementById('hint-icon');
-    const image = document.getElementById('hint-diagram');
+    const button =
+        document.getElementById(
+            'hint-button'
+        );
 
-    image.style.display = 'none';
-    image.removeAttribute('src');
+    const icon =
+        document.getElementById(
+            'hint-icon'
+        );
 
-    button.disabled = false;
-    button.style.display = 'inline-flex';
-    button.title = "Afficher l'indice";
-    button.setAttribute('aria-label', "Afficher l'indice");
+    const image =
+        document.getElementById(
+            'hint-diagram'
+        );
 
-    icon.src = './images/hint.svg';
-    icon.alt = "Afficher l'indice";
+
+    if (
+        !button ||
+        !icon ||
+        !image
+    ) {
+        return;
+    }
+
+
+    // Réinitialiser l'affichage de l'indice
+
+    image.style.display =
+        'none';
+
+    image.removeAttribute(
+        'src'
+    );
+
+
+    // Par défaut :
+    // bouton désactivé en attendant
+    // de vérifier si un indice existe.
+
+    button.disabled =
+        true;
+
+    button.style.display =
+        'inline-flex';
+
+    button.title =
+        "Pas d'indice pour cette position";
+
+    button.setAttribute(
+        'aria-label',
+        "Pas d'indice pour cette position"
+    );
+
+
+    icon.src =
+        './images/hint.svg';
+
+    icon.alt =
+        "Pas d'indice pour cette position";
+
+
+    const position =
+        getSelectedPosition();
+
+
+    if (
+        !position
+    ) {
+        return;
+    }
+
+
+    // --------------------------------------------------
+    // Vérifier si l'image d'indice existe
+    // --------------------------------------------------
+
+    const testImage =
+        new Image();
+
+
+    testImage.onload =
+        () => {
+
+            // L'image existe :
+            // le bouton devient cliquable.
+
+            button.disabled =
+                false;
+
+            button.title =
+                "Afficher l'indice";
+
+            button.setAttribute(
+                'aria-label',
+                "Afficher l'indice"
+            );
+
+            icon.src =
+                './images/hint.svg';
+
+            icon.alt =
+                "Afficher l'indice";
+
+        };
+
+
+    testImage.onerror =
+        () => {
+
+            // Aucun indice :
+            // le bouton reste désactivé.
+
+            button.disabled =
+                true;
+
+            button.title =
+                "Pas d'indice pour cette position";
+
+            button.setAttribute(
+                'aria-label',
+                "Pas d'indice pour cette position"
+            );
+
+        };
+
+
+    testImage.src =
+        './images/hints/' +
+        position.id +
+        '.png';
 
 }
 
 
+
 function toggleHint() {
 
-    const button = document.getElementById('hint-button');
-    const icon = document.getElementById('hint-icon');
-    const image = document.getElementById('hint-diagram');
-    const position = getSelectedPosition();
+    const button =
+        document.getElementById(
+            'hint-button'
+        );
 
-    if (!position) {
+    const icon =
+        document.getElementById(
+            'hint-icon'
+        );
+
+    const image =
+        document.getElementById(
+            'hint-diagram'
+        );
+
+    const position =
+        getSelectedPosition();
+
+
+    if (
+        !position ||
+        button.disabled
+    ) {
         return;
     }
+
 
     const isCurrentlyHidden =
         image.style.display === 'none' ||
         !image.style.display;
 
-    if (isCurrentlyHidden) {
 
-        image.onload = () => {
-            image.style.display = 'block';
-        };
+    if (
+        isCurrentlyHidden
+    ) {
 
-        image.onerror = () => {
-            image.style.display = 'none';
-            image.removeAttribute('src');
-            button.title = "Pas d'indice pour cette position";
-            button.setAttribute('aria-label', "Pas d'indice pour cette position");
-            button.disabled = true;
-        };
+        image.onload =
+            () => {
 
-        image.src = './images/hints/' + position.id + '.png';
+                image.style.display =
+                    'block';
 
-        button.title = "Masquer l'indice";
-        button.setAttribute('aria-label', "Masquer l'indice");
-        icon.src = './images/no_hint.svg';
-        icon.alt = "Masquer l'indice";
+            };
 
-    } else {
 
-        image.style.display = 'none';
-        image.removeAttribute('src');
-        button.title = "Afficher l'indice";
-        button.setAttribute('aria-label', "Afficher l'indice");
-        icon.src = './images/hint.svg';
-        icon.alt = "Afficher l'indice";
+        image.onerror =
+            () => {
+
+                image.style.display =
+                    'none';
+
+                image.removeAttribute(
+                    'src'
+                );
+
+                button.disabled =
+                    true;
+
+                button.title =
+                    "Pas d'indice pour cette position";
+
+                button.setAttribute(
+                    'aria-label',
+                    "Pas d'indice pour cette position"
+                );
+
+            };
+
+
+        image.src =
+            './images/hints/' +
+            position.id +
+            '.png';
+
+
+        button.title =
+            "Masquer l'indice";
+
+        button.setAttribute(
+            'aria-label',
+            "Masquer l'indice"
+        );
+
+
+        icon.src =
+            './images/no_hint.svg';
+
+        icon.alt =
+            "Masquer l'indice";
+
+
+    }
+
+    else {
+
+        image.style.display =
+            'none';
+
+        image.removeAttribute(
+            'src'
+        );
+
+
+        button.title =
+            "Afficher l'indice";
+
+        button.setAttribute(
+            'aria-label',
+            "Afficher l'indice"
+        );
+
+
+        icon.src =
+            './images/hint.svg';
+
+        icon.alt =
+            "Afficher l'indice";
 
     }
 
