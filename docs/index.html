@@ -8,18 +8,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@10.1.1/assets/chessground.base.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@10.1.1/assets/chessground.brown.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@10.1.1/assets/chessground.alpha.css">
-  <script type="module" crossorigin src="/cc1/assets/index-RZtgztmM.js"></script>
-  <link rel="stylesheet" crossorigin href="/cc1/assets/index-BisqJWre.css">
+  <script type="module" crossorigin src="/cc1/assets/index-OJ0Y5uoG.js"></script>
+  <link rel="stylesheet" crossorigin href="/cc1/assets/index-BnUrXNOm.css">
 </head>
 <body>
 <div class="application">
 
-   
+    <h1>TdB - Entraînement aux Finales</h1>
+    <h2 class="app-subtitle">Cases Conjuguées</h2>
 
-    <div class="library-control">
-        <label for="library-select"></label>
-        <select id="library-select"></select>
-        <select id="position-select"></select>
+    <div class="library-control" id="tag-menus">
+        <!--
+            Rempli dynamiquement par buildTagMenus() dans app.js :
+            un menu déroulant par tag défini dans tagOrder
+            (positions.js), le dernier menu affichant les
+            positions elles-mêmes.
+        -->
     </div>
 
     <div class="settings">
@@ -46,6 +50,8 @@
             </div>
         </div>
     </div>
+
+    <div id="library-subtitle" class="library-subtitle"></div>
 
     <div class="board-wrapper">
         <div class="rank-labels">
