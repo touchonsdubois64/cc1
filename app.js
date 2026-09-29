@@ -3,28 +3,23 @@ import { Chessground } from '@lichess-org/chessground';
 import '@lichess-org/chessground/assets/chessground.base.css';
 import '@lichess-org/chessground/assets/chessground.brown.css';
 
-import { libraries } from './positions.js';
+import { positions, tagOrder } from './positions.js';
 
 
 // ==================================================
-// PARAMÈTRES URL
+// SÉLECTION EN COURS DANS LES MENUS DE TAGS
+// ==================================================
+//
+// selectedTagValues[i] contient la valeur choisie pour
+// le tag tagOrder[i] (pour i allant de 0 à tagOrder.length - 2).
+// Le dernier niveau (tagOrder.length - 1) n'est pas une
+// valeur de tag : c'est directement la position choisie,
+// via son id, stockée dans selectedPositionId.
 // ==================================================
 
-const urlParams =
-    new URLSearchParams(
-        window.location.search
-    );
+let selectedTagValues = [];
 
-
-let activeLibraryKey =
-    urlParams.get('finale') || 'ebersz';
-
-
-if (!libraries[activeLibraryKey]) {
-
-    activeLibraryKey = 'ebersz';
-
-}
+let selectedPositionId = null;
 
 
 // ==================================================
@@ -323,24 +318,17 @@ function selectModeButton(mode) {
 
 
 // ==================================================
-// SOUS-TITRE DU TYPE DE FINALE
+// SOUS-TITRE DE LA POSITION (types de pièces en jeu)
 // ==================================================
 
-function getLibraryPieceTypes() {
+function getPositionPieceTypes(fen) {
 
-    const library =
-        libraries[activeLibraryKey];
-
-    if (
-        !library ||
-        !library.positions ||
-        library.positions.length === 0
-    ) {
+    if (!fen) {
         return { white: [], black: [] };
     }
 
     const placement =
-        library.positions[0].fen
+        fen
             .trim()
             .split(/\s+/)[0];
 
@@ -398,7 +386,7 @@ function createSubtitlePiece(color, piece) {
 }
 
 
-function updateLibrarySubtitle() {
+function updatePositionSubtitle(position) {
 
     const subtitle =
         document.getElementById(
@@ -408,9 +396,6 @@ function updateLibrarySubtitle() {
     if (!subtitle) {
         return;
     }
-
-    const library =
-        libraries[activeLibraryKey];
 
     subtitle.innerHTML = '';
 
@@ -428,14 +413,16 @@ function updateLibrarySubtitle() {
         document.createElement('span');
 
     title.textContent =
-        library ? library.title : '';
+        position ? position.title : '';
 
     title.style.marginRight = '8px';
 
     subtitle.appendChild(title);
 
     const pieces =
-        getLibraryPieceTypes();
+        getPositionPieceTypes(
+            position ? position.fen : ''
+        );
 
     pieces.white.forEach(piece => {
 
@@ -473,65 +460,6 @@ function updateLibrarySubtitle() {
         );
 
     });
-
-}
-
-
-function setupLibraryPresentation() {
-
-    const select =
-        document.getElementById(
-            'library-select'
-        );
-
-    if (!select) {
-        return;
-    }
-
-    select.style.display = 'none';
-
-    const label =
-        document.querySelector(
-            'label[for="library-select"]'
-        );
-
-    if (label) {
-        label.style.display = 'none';
-    }
-
-    let subtitle =
-        document.getElementById(
-            'library-subtitle'
-        );
-
-    if (!subtitle) {
-
-        subtitle =
-            document.createElement('div');
-
-        subtitle.id =
-            'library-subtitle';
-
-        const positionSelect =
-    document.getElementById(
-        'position-select'
-    );
-
-if (
-    positionSelect &&
-    positionSelect.parentNode
-) {
-
-    positionSelect.parentNode.insertBefore(
-        subtitle,
-        positionSelect
-    );
-
-}
-
-    }
-
-    updateLibrarySubtitle();
 
 }
 
@@ -5141,126 +5069,389 @@ function loadPosition(
 
 
 // ==================================================
-// MENU DES FINALES
+// COMPLEXITÉ D'UNE POSITION (NOMBRE DE PIONS)
 // ==================================================
 
-function buildLibrarySelect() {
+function countPawns(fen) {
 
-    const select =
-        document.getElementById(
-            'library-select'
-        );
+    const placement =
+        fen
+            .trim()
+            .split(/\s+/)[0];
 
+    let count = 0;
 
-    select.innerHTML =
-        '';
+    for (const character of placement) {
 
-
-    for (
-        const key
-        of Object.keys(
-            libraries
-        )
-    ) {
-
-        const option =
-            document.createElement(
-                'option'
-            );
-
-
-        option.value =
-            key;
-
-
-        option.textContent =
-            libraries[key].title;
-
-
-        select.appendChild(
-            option
-        );
+        if (
+            character === 'P' ||
+            character === 'p'
+        ) {
+            count += 1;
+        }
 
     }
 
-
-    select.value =
-        activeLibraryKey;
-
-    updateLibrarySubtitle();
+    return count;
 
 }
 
 
 // ==================================================
-// MENU DES POSITIONS
+// VALEUR D'UN TAG POUR UNE POSITION
 // ==================================================
 
-function buildPositionSelect() {
+const UNTAGGED_LABEL =
+    'Non renseigné';
 
-    const select =
-        document.getElementById(
-            'position-select'
-        );
+function getTagValue(position, tagKey) {
 
-
-    select.innerHTML =
-        '';
-
-
-    const library =
-        libraries[
-            activeLibraryKey
-        ];
-
+    const value =
+        position.tags
+            ? position.tags[tagKey]
+            : undefined;
 
     if (
+        value === undefined ||
+        value === null ||
+        value === ''
+    ) {
+        return UNTAGGED_LABEL;
+    }
 
-        !library ||
+    return String(value);
 
-        !library.positions
+}
 
+
+// ==================================================
+// POSITIONS CORRESPONDANT AUX TAGS CHOISIS
+// ==================================================
+//
+// selections contient, dans l'ordre de tagOrder, les
+// valeurs déjà choisies pour les niveaux 0 à N-2.
+// Le dernier tag de tagOrder n'est jamais un critère de
+// filtre : c'est lui qui, à la place d'un menu de valeurs,
+// donne directement le menu des positions.
+// ==================================================
+
+function filterPositionsBySelections(selections) {
+
+    return positions.filter(position =>
+
+        selections.every(
+
+            (value, index) =>
+                getTagValue(position, tagOrder[index]) === value
+
+        )
+
+    );
+
+}
+
+
+// ==================================================
+// CONSTRUCTION DES MENUS EN CASCADE
+// ==================================================
+//
+// Un menu déroulant est créé pour chaque tag de tagOrder,
+// sauf le dernier qui devient directement le menu des
+// positions (id="position-select"), trié par complexité
+// croissante (nombre de pions).
+//
+// Pour changer le nombre ou l'ordre des menus, modifiez
+// uniquement le tableau "tagOrder" dans positions.js.
+// ==================================================
+
+function getTagMenusContainer() {
+
+    return document.getElementById(
+        'tag-menus'
+    );
+
+}
+
+
+function buildTagMenus() {
+
+    const container =
+        getTagMenusContainer();
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML =
+        '';
+
+    selectedTagValues = [];
+    selectedPositionId = null;
+
+
+    for (
+        let level = 0;
+        level < tagOrder.length - 1;
+        level += 1
     ) {
 
-        return;
+        const select =
+            document.createElement(
+                'select'
+            );
+
+        select.id =
+            'tag-select-' + level;
+
+        select.addEventListener(
+
+            'change',
+
+            () => {
+
+                selectedTagValues =
+                    selectedTagValues.slice(
+                        0,
+                        level
+                    );
+
+                selectedTagValues.push(
+                    select.value
+                );
+
+                renderTagMenus();
+
+                const position =
+                    getSelectedPosition();
+
+                if (position) {
+
+                    loadPosition(
+                        position.fen
+                    );
+
+                    resetHintUI();
+
+                }
+
+            }
+
+        );
+
+        container.appendChild(
+            select
+        );
 
     }
 
 
+    const positionSelect =
+        document.createElement(
+            'select'
+        );
+
+    positionSelect.id =
+        'position-select';
+
+    positionSelect.addEventListener(
+
+        'change',
+
+        () => {
+
+            selectedPositionId =
+                positionSelect.value;
+
+            const position =
+                getSelectedPosition();
+
+            updatePositionSubtitle(
+                position
+            );
+
+            if (position) {
+
+                loadPosition(
+                    position.fen
+                );
+
+                resetHintUI();
+
+            }
+
+        }
+
+    );
+
+    container.appendChild(
+        positionSelect
+    );
+
+
+    renderTagMenus();
+
+}
+
+
+// ==================================================
+// MISE À JOUR DES OPTIONS DES MENUS EN CASCADE
+// ==================================================
+
+function renderTagMenus() {
+
+    const container =
+        getTagMenusContainer();
+
+    if (!container) {
+        return;
+    }
+
+
+    // Menus de valeurs (niveaux 0 à N-2)
+
     for (
-        const position
-        of library.positions
+        let level = 0;
+        level < tagOrder.length - 1;
+        level += 1
     ) {
+
+        const select =
+            document.getElementById(
+                'tag-select-' + level
+            );
+
+        if (!select) {
+            continue;
+        }
+
+        const candidates =
+            filterPositionsBySelections(
+                selectedTagValues.slice(0, level)
+            );
+
+        const values =
+            Array.from(
+                new Set(
+                    candidates.map(
+                        position =>
+                            getTagValue(
+                                position,
+                                tagOrder[level]
+                            )
+                    )
+                )
+            ).sort(
+                (a, b) =>
+                    a.localeCompare(b, 'fr')
+            );
+
+        select.innerHTML =
+            '';
+
+        values.forEach(value => {
+
+            const option =
+                document.createElement(
+                    'option'
+                );
+
+            option.value =
+                value;
+
+            option.textContent =
+                value;
+
+            select.appendChild(
+                option
+            );
+
+        });
+
+        if (
+            !values.includes(
+                selectedTagValues[level]
+            )
+        ) {
+
+            selectedTagValues[level] =
+                values[0];
+
+        }
+
+        select.value =
+            selectedTagValues[level] || '';
+
+    }
+
+
+    // Dernier menu : positions correspondant aux tags
+    // choisis, triées par complexité croissante.
+
+    const positionSelect =
+        document.getElementById(
+            'position-select'
+        );
+
+    if (!positionSelect) {
+        return;
+    }
+
+    const matchingPositions =
+        filterPositionsBySelections(
+            selectedTagValues.slice(
+                0,
+                tagOrder.length - 1
+            )
+        ).sort(
+            (a, b) =>
+                countPawns(a.fen) - countPawns(b.fen)
+        );
+
+    positionSelect.innerHTML =
+        '';
+
+    matchingPositions.forEach(position => {
 
         const option =
             document.createElement(
                 'option'
             );
 
-
         option.value =
             position.id;
-
 
         option.textContent =
             position.title;
 
-
-        select.appendChild(
+        positionSelect.appendChild(
             option
         );
 
-    }
-
+    });
 
     if (
-        library.positions.length > 0
+        !matchingPositions.some(
+            position => position.id === selectedPositionId
+        )
     ) {
 
-        select.value =
-            library.positions[0].id;
+        selectedPositionId =
+            matchingPositions.length > 0
+                ? matchingPositions[0].id
+                : null;
 
     }
+
+    if (selectedPositionId) {
+
+        positionSelect.value =
+            selectedPositionId;
+
+    }
+
+    updatePositionSubtitle(
+        getSelectedPosition()
+    );
 
 }
 
@@ -5271,34 +5462,15 @@ function buildPositionSelect() {
 
 function getSelectedPosition() {
 
-    const id =
-        document
-            .getElementById(
-                'position-select'
-            )
-            .value;
-
-
-    const library =
-        libraries[
-            activeLibraryKey
-        ];
-
-
-    if (
-        !library
-    ) {
-
+    if (!selectedPositionId) {
         return null;
-
     }
 
-
-    return library.positions.find(
-
-        position =>
-            position.id === id
-
+    return (
+        positions.find(
+            position =>
+                position.id === selectedPositionId
+        ) || null
     );
 
 }
@@ -5591,83 +5763,9 @@ document
     );
 
 
-// ==================================================
-// CHANGEMENT DE FINALE
-// ==================================================
-
-document
-    .getElementById(
-        'library-select'
-    )
-    .addEventListener(
-
-        'change',
-
-        event => {
-
-            activeLibraryKey =
-                event.target.value;
-
-
-            buildPositionSelect();
-
-            updateLibrarySubtitle();
-
-
-            const position =
-                getSelectedPosition();
-
-
-            if (
-                position
-            ) {
-
-                loadPosition(
-                    position.fen
-                );
-
-                resetHintUI();
-
-            }
-
-        }
-
-    );
-
-
-// ==================================================
-// CHANGEMENT DE POSITION
-// ==================================================
-
-document
-    .getElementById(
-        'position-select'
-    )
-    .addEventListener(
-
-        'change',
-
-        () => {
-
-            const position =
-                getSelectedPosition();
-
-
-            if (
-                position
-            ) {
-
-                loadPosition(
-                    position.fen
-                );
-
-                resetHintUI();
-
-            }
-
-        }
-
-    );
+// (Les menus de tags et le menu des positions sont créés
+// dynamiquement par buildTagMenus(), qui attache déjà
+// leurs propres écouteurs "change".)
 
 
 // ==================================================
@@ -6027,20 +6125,13 @@ function exportPgnLine(node, ply) {
 
 function buildCompletePgn() {
 
-    const library =
-        libraries[activeLibraryKey];
-
     const position =
         getSelectedPosition();
 
     const title =
         position
             ? position.title
-            : (
-                library
-                    ? library.title
-                    : 'Entraînement aux finales'
-            );
+            : 'Entraînement aux finales';
 
     let pgn =
         '[Event "' +
@@ -6584,17 +6675,11 @@ setupModeButtonImages();
 
 setupStockfishImage();
 
-// setupLibraryPresentation();
-
 setupNotationMenu();
 
 setupPgnExportButton();
 
-buildLibrarySelect();
-
-buildPositionSelect();
-
-updateLibrarySubtitle();
+buildTagMenus();
 
 updateCoordinates();
 

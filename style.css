@@ -2,6 +2,8 @@
 body { margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; background:#f3efe8; color:#2b2520; }
 .application { width:100%; max-width:950px; margin:0 auto; padding:20px; }
 h1 { margin:0 0 25px; text-align:center; font-size:1.8rem; color:#4a3022; }
+.app-subtitle { margin:-15px 0 20px; text-align:center; font-size:1.15rem; font-weight:600; color:#6b5540; }
+.library-subtitle { display:flex; align-items:center; justify-content:center; gap:5px; flex-wrap:wrap; width:100%; font-weight:bold; font-size:1.08rem; color:#4a3022; margin-bottom:8px; }
 .library-control { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px; margin-bottom:20px; }
 .library-control label, .notation-control label { font-weight:bold; }
 .library-control select, .notation-control select { padding:7px 10px; border:1px solid #b9a998; border-radius:5px; background:#fff; font-size:.95rem; }
