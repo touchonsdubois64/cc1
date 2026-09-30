@@ -399,67 +399,17 @@ function updatePositionSubtitle(position) {
 
     subtitle.innerHTML = '';
 
-    subtitle.style.display = 'flex';
-    subtitle.style.alignItems = 'center';
-    subtitle.style.justifyContent = 'center';
-    subtitle.style.gap = '5px';
-    subtitle.style.flexWrap = 'wrap';
+    subtitle.style.display = 'block';
+    subtitle.style.textAlign = 'center';
     subtitle.style.width = '100%';
     subtitle.style.fontWeight = 'bold';
     subtitle.style.fontSize = '1.08rem';
     subtitle.style.color = '#4a3022';
 
-    const title =
-        document.createElement('span');
-
-    title.textContent =
-        position ? position.title : '';
-
-    title.style.marginRight = '8px';
-
-    subtitle.appendChild(title);
-
-    const pieces =
-        getPositionPieceTypes(
-            position ? position.fen : ''
-        );
-
-    pieces.white.forEach(piece => {
-
-        subtitle.appendChild(
-            createSubtitlePiece(
-                'w',
-                piece
-            )
-        );
-
-    });
-
-    if (
-        pieces.white.length > 0 &&
-        pieces.black.length > 0
-    ) {
-
-        const versus =
-            document.createElement('span');
-
-        versus.textContent = 'vs';
-        versus.style.margin = '0 5px';
-
-        subtitle.appendChild(versus);
-
-    }
-
-    pieces.black.forEach(piece => {
-
-        subtitle.appendChild(
-            createSubtitlePiece(
-                'b',
-                piece
-            )
-        );
-
-    });
+    subtitle.textContent =
+        position
+            ? (position.task || position.title || '')
+            : '';
 
 }
 
@@ -5203,11 +5153,35 @@ function buildTagMenus() {
         select.id =
             'tag-select-' + level;
 
+        select.hidden =
+            level > 0;
+
         select.addEventListener(
 
             'change',
 
             () => {
+
+for (let hideLevel = level + 1; hideLevel < tagOrder.length - 1; hideLevel += 1) {
+
+    const laterSelect =
+        document.getElementById('tag-select-' + hideLevel);
+
+    if (laterSelect) {
+        laterSelect.hidden = true;
+    }
+
+}
+
+document.getElementById('position-select').hidden = true;
+
+const nextSelect =
+    document.getElementById('tag-select-' + (level + 1)) ||
+    document.getElementById('position-select');
+
+if (nextSelect) {
+    nextSelect.hidden = false;
+}
 
                 selectedTagValues =
                     selectedTagValues.slice(
@@ -5252,6 +5226,9 @@ function buildTagMenus() {
 
     positionSelect.id =
         'position-select';
+
+    positionSelect.hidden =
+        true;
 
     positionSelect.addEventListener(
 

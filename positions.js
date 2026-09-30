@@ -31,83 +31,74 @@ export const positions = [
 
     {
         id: 'ebersz-01',
-        title: 'Les Blancs jouent et font nulle (Ebersz, 1930)',
+        title: 'Ebersz (Magyar Sakkvilag, 1930)',
         fen: '6k1/1p6/1P1p4/3p4/3Pp2p/4P2p/1K5P/8 w - - 0 1',
         tags: {
             categorie: 'Positions à 2 pôles',
             auteur: 'Ebersz',
-            annee: '1930'
+            annee: '1930',
+            task: 'Les Blancs jouent et font nulle'
         }
     },
 
     {
         id: 'ebersz-02',
-        title: 'Les Noirs jouent et gagnent (Ebersz, 1930)',
+        title: 'Ebersz (Magyar Sakkvilag, 1930)',
         fen: '7k/1p6/1P1p4/3p4/3Pp2p/4P2p/1K5P/8 b - - 0 1',
         tags: {
             categorie: 'Positions à 2 pôles',
             auteur: 'Ebersz',
-            annee: '1930'
+            annee: '1930',
+            task: 'Les Noirs jouent et gagnent'
         }
     },
 
     {
         id: 'reichhelm-01',
-        title: 'Les Blancs jouent et gagnent (Lasker-Reichhelm, 1901)',
+        title: 'Lasker-Reichhelm (Chicago Tribune, 1901)',
         fen: '8/k7/3p4/p2P1p2/P2P1P2/8/8/K7 w - - 0 1',
         tags: {
             categorie: 'Positions à 2 pôles',
             auteur: 'Lasker-Reichhelm',
-            annee: '1901'
+            annee: '1901',
+            task: 'Les Blancs jouent et gagnent'
         }
     },
 
     {
         id: 'halberstadt-01',
-        title: 'Les Blancs jouent et gagnent (Halberstadt, 1932)',
+        title: 'Halberstadt (Opposition et Conjugaison, 1932)',
         fen: '8/k6p/3p1p1P/3P2p1/3P2P1/8/6P1/K7 w - - 0 1',
         tags: {
             categorie: 'Positions à 2 pôles',
             auteur: 'Halberstadt',
-            annee: '1932'
+            annee: '1932',
+            task: 'Les Blancs jouent et gagnent'
         }
     },
 
-    // La même position de Halberstadt sert aussi
-    // d'exemple de triangulation : il suffit de la
-    // dupliquer sous un autre id avec un autre tag
-    // "categorie" pour qu'elle apparaisse dans les
-    // deux classements.
+   
     {
-        id: 'halberstadt-01-triangulation',
-        title: 'Les Blancs jouent et font nulle (Halberstadt, 1932)',
-        fen: '8/k6p/3p1p1P/3P2p1/3P2P1/8/6P1/K7 w - - 0 1',
+        id: 'blathy-01',
+        title: 'Blathy (Vielzügige Schachaufgaben, 1890)',
+        fen: 'N3k1nR/p1p1Pp2/2P1pPr1/b2pP3/P1pP1K2/2P3p1/6P1/8 w - - 0 1',
         tags: {
             categorie: 'Triangulation',
-            auteur: 'Halberstadt',
-            annee: '1932'
-        }
-    },
-
-    {
-        id: 'halberstadt-02',
-        title: 'Les Noirs jouent et gagnent (Ebersz, 1930)',
-        fen: '7k/1p6/1P1p4/3p4/3Pp2p/4P2p/1K5P/8 b - - 0 1',
-        tags: {
-            categorie: 'Triangulation',
-            auteur: 'Ebersz',
-            annee: '1930'
+            auteur: 'Blathy',
+            annee: '1890',
+            task: 'Les Blancs jouent et gagnent'
         }
     },
 
     {
-        id: 'ebersz-03',
-        title: 'Les Noirs jouent et gagnent (Ebersz, 1930)',
-        fen: '7k/1p6/1P1p4/3p4/3Pp2p/4P2p/7P/1K6 b - - 0 1',
+        id: 'grigoriev-01',
+        title: 'N.D. Grigoriev (K Novoi Armii, 1920)',
+        fen: '8/8/8/1p6/1P6/3P1k2/3K4/8 w - - 0 1',
         tags: {
             categorie: 'Triangulation',
-            auteur: 'Ebersz',
-            annee: '1930'
+            auteur: 'Grigoriev',
+            annee: '1920',
+            task: 'Les Blancs jouent et gagnent'
         }
     }
 
@@ -157,4 +148,4 @@ export const positions = [
 // n'est nécessaire ailleurs dans le code.
 // ==================================================
 
-export const tagOrder = ['categorie', 'annee', 'auteur'];
+export const tagOrder = ['auteur', 'annee'];
