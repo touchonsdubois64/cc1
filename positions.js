@@ -148,4 +148,4 @@ export const positions = [
 // n'est nécessaire ailleurs dans le code.
 // ==================================================
 
-export const tagOrder = ['auteur', 'annee'];
+export const tagOrder = [''];

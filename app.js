@@ -406,7 +406,7 @@ function updatePositionSubtitle(position) {
     subtitle.style.fontSize = '1.08rem';
     subtitle.style.color = '#4a3022';
 
-    subtitle.textContent =
+        subtitle.textContent =
         position
             ? (getTagValue(position, 'task') || position.title || '')
             : '';
@@ -5122,6 +5122,22 @@ function getTagMenusContainer() {
 
 }
 
+// ==================================================
+// TAGS RÉELLEMENT UTILISABLES (ignore les entrées
+// vides ou non renseignées dans tagOrder)
+// ==================================================
+
+function getActiveTagOrder() {
+
+    return tagOrder.filter(
+
+        tag =>
+            typeof tag === 'string' &&
+            tag.trim() !== ''
+
+    );
+
+}
 
 function buildTagMenus() {
 
@@ -5132,6 +5148,9 @@ function buildTagMenus() {
         return;
     }
 
+    const activeTags =
+        getActiveTagOrder();
+
     container.innerHTML =
         '';
 
@@ -5141,7 +5160,7 @@ function buildTagMenus() {
 
     for (
         let level = 0;
-        level < tagOrder.length - 1;
+        level < activeTags.length;
         level += 1
     ) {
 
@@ -5162,26 +5181,27 @@ function buildTagMenus() {
 
             () => {
 
-for (let hideLevel = level + 1; hideLevel < tagOrder.length - 1; hideLevel += 1) {
+                for (
+                    let hideLevel = level + 1;
+                    hideLevel < activeTags.length;
+                    hideLevel += 1
+                ) {
 
-    const laterSelect =
-        document.getElementById('tag-select-' + hideLevel);
+                    const laterSelect =
+                        document.getElementById(
+                            'tag-select-' + hideLevel
+                        );
 
-    if (laterSelect) {
-        laterSelect.hidden = true;
-    }
+                    if (laterSelect) {
+                        laterSelect.hidden = true;
+                    }
 
-}
+                }
 
-document.getElementById('position-select').hidden = true;
+                document.getElementById(
+                    'position-select'
+                ).hidden = true;
 
-const nextSelect =
-    document.getElementById('tag-select-' + (level + 1)) ||
-    document.getElementById('position-select');
-
-if (nextSelect) {
-    nextSelect.hidden = false;
-}
 
                 selectedTagValues =
                     selectedTagValues.slice(
@@ -5194,6 +5214,20 @@ if (nextSelect) {
                 );
 
                 renderTagMenus();
+
+
+                const nextSelect =
+                    document.getElementById(
+                        'tag-select-' + (level + 1)
+                    ) ||
+                    document.getElementById(
+                        'position-select'
+                    );
+
+                if (nextSelect) {
+                    nextSelect.hidden = false;
+                }
+
 
                 const position =
                     getSelectedPosition();
@@ -5228,7 +5262,7 @@ if (nextSelect) {
         'position-select';
 
     positionSelect.hidden =
-        true;
+        activeTags.length > 0;
 
     positionSelect.addEventListener(
 
@@ -5270,10 +5304,6 @@ if (nextSelect) {
 }
 
 
-// ==================================================
-// MISE À JOUR DES OPTIONS DES MENUS EN CASCADE
-// ==================================================
-
 function renderTagMenus() {
 
     const container =
@@ -5283,12 +5313,13 @@ function renderTagMenus() {
         return;
     }
 
+    const activeTags =
+        getActiveTagOrder();
 
-    // Menus de valeurs (niveaux 0 à N-2)
 
     for (
         let level = 0;
-        level < tagOrder.length - 1;
+        level < activeTags.length;
         level += 1
     ) {
 
@@ -5313,7 +5344,7 @@ function renderTagMenus() {
                         position =>
                             getTagValue(
                                 position,
-                                tagOrder[level]
+                                activeTags[level]
                             )
                     )
                 )
@@ -5361,9 +5392,6 @@ function renderTagMenus() {
     }
 
 
-    // Dernier menu : positions correspondant aux tags
-    // choisis, triées par complexité croissante.
-
     const positionSelect =
         document.getElementById(
             'position-select'
@@ -5377,7 +5405,7 @@ function renderTagMenus() {
         filterPositionsBySelections(
             selectedTagValues.slice(
                 0,
-                tagOrder.length - 1
+                activeTags.length
             )
         ).sort(
             (a, b) =>
