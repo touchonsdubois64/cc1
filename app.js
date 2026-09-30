@@ -408,7 +408,7 @@ function updatePositionSubtitle(position) {
 
     subtitle.textContent =
         position
-            ? (getTagValue(position, 'task') || position.title || '')
+            ? (getTagValue(position, 'task') || '')
             : '';
 
 }
