@@ -257,6 +257,16 @@ h1 { margin:0 0 25px; text-align:center; font-size:1.8rem; color:#4a3022; }
     height: 85%;
 }
 
+#flip img {
+    width: 70%;   /* ajustez cette valeur */
+    height: 70%;
+}
+
+#restart img {
+    width: 65%;   /* ajustez cette valeur */
+    height: 65%;
+}
+
 /* ==================================================
    AJUSTEMENTS DE PROPORTIONS PAR RAPPORT À L'ÉCHIQUIER
    ================================================== */
