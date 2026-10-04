@@ -1299,7 +1299,7 @@ export const positions = [
             '‘Blocage': '’ : Pions semi-bloqués',
             '‘Tempo': '’ : avec tempo de réserve',
             '‘Contre-Attaque': '’ : avec contre-attaque',
-            'Type géométrique': 'Système Rectangulaire (R6)',
+            'Type géométrique': 'Système Rectangulaire à 6 Cases (R6)',
             '‘Dégénérescence': '’ : sans dégénérescence',
             '‘Excès de Conjugaison': '’ : avec excès de conjugaison'
         }
@@ -1321,7 +1321,7 @@ export const positions = [
             '‘Blocage': '’ : Pions bloqués',
             '‘Tempo': '’ : avec tempo de réserve',
             '‘Contre-Attaque': '’ : avec contre-attaque',
-            'Type géométrique': 'Système Rectangulaire (R6)',
+            'Type géométrique': 'Système Rectangulaire à 6 Cases (R6)',
             '‘Dégénérescence': '’ : sans dégénérescence',
             '‘Excès de Conjugaison': '’ : avec excès de conjugaison'
         }
@@ -1343,7 +1343,7 @@ export const positions = [
             '‘Blocage': '’ : Pions bloqués',
             '‘Tempo': '’ : avec tempo de réserve',
             '‘Contre-Attaque': '’ : avec contre-attaque',
-            'Type géométrique': 'Système Rectangulaire (R6)',
+            'Type géométrique': 'Système Rectangulaire à 6 Cases (R6)',
             '‘Dégénérescence': '’ : sans dégénérescence',
             '‘Excès de Conjugaison': '’ : avec excès de conjugaison'
         }
@@ -1519,7 +1519,7 @@ export const positions = [
             '‘Blocage': '’ : Pions semi-bloqués',
             '‘Tempo': '’ : avec tempo de réserve',
             '‘Contre-Attaque': '’ : avec contre-attaque',
-            'Type géométrique': 'Système Rectangulaire (R6)',
+            'Type géométrique': 'Système Rectangulaire à 6 Cases (R6)',
             '‘Dégénérescence': '’ : sans dégénérescence',
             '‘Excès de Conjugaison': '’ : sans excès de conjugaison'
         }
@@ -1541,7 +1541,7 @@ export const positions = [
             '‘Blocage': '’ : Pions semi-bloqués',
             '‘Tempo': '’ : avec tempo de réserve',
             '‘Contre-Attaque': '’ : avec contre-attaque',
-            'Type géométrique': 'Système Rectangulaire (R6)',
+            'Type géométrique': 'Système Rectangulaire à 6 Cases (R6)',
             '‘Dégénérescence': '’ : sans dégénérescence',
             '‘Excès de Conjugaison': '’ : sans excès de conjugaison'
         }
@@ -1870,7 +1870,7 @@ export const positions = [
             '‘Blocage': '’ : Pions semi-bloqués',
             '‘Tempo': '’ : avec tempo de réserve',
             '‘Contre-Attaque': '’ : avec contre-attaque',
-            'Type géométrique': 'Système Rectangulaire (R6)',
+            'Type géométrique': 'Système Rectangulaire à 6 Cases (R6)',
             '‘Dégénérescence': '’ : sans dégénérescence',
             '‘Excès de Conjugaison': '’ : sans excès de conjugaison'
         }
@@ -1892,7 +1892,7 @@ export const positions = [
             '‘Blocage': '’ : Pions semi-bloqués',
             '‘Tempo': '’ : sans tempo de réserve',
             '‘Contre-Attaque': '’ : avec contre-attaque',
-            'Type géométrique': 'Système Rectangulaire (R6)',
+            'Type géométrique': 'Système Rectangulaire à 6 Cases (R6)',
             '‘Dégénérescence': '’ : sans dégénérescence',
             '‘Excès de Conjugaison': '’ : sans excès de conjugaison'
         }
@@ -1914,7 +1914,7 @@ export const positions = [
             '‘Blocage': '’ : Pions semi-bloqués',
             '‘Tempo': '’ : sans tempo de réserve',
             '‘Contre-Attaque': '’ : avec contre-attaque',
-            'Type géométrique': 'Système Rectangulaire (R6)',
+            'Type géométrique': 'Système Rectangulaire à 6 Cases (R6)',
             '‘Dégénérescence': '’ : sans dégénérescence',
             '‘Excès de Conjugaison': '’ : sans excès de conjugaison'
         }
