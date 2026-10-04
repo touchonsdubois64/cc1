@@ -408,7 +408,7 @@ function updatePositionSubtitle(position) {
 
         subtitle.textContent =
         position
-            ? (getTagValue(position, 'task') || position.title || '')
+            ? (getTagValue(position, 'Task') || position.title || '')
             : '';
 
 }
@@ -1452,7 +1452,7 @@ const ground =
         {
 
             fen:
-                game.fen(),
+                '8/8/8/8/8/8/8/8',   // plateau vide à l'affichage
 
             orientation:
                 'white',
@@ -1469,7 +1469,7 @@ const ground =
                     'white',
 
                 dests:
-                    getDests(),
+                    new Map(),        // aucun coup possible tant qu'aucune position n'est chargée
 
                 events: {
 
@@ -5316,6 +5316,13 @@ function renderTagMenus() {
     const activeTags =
         getActiveTagOrder();
 
+    // NOUVEAU : tant qu'un niveau n'a pas été choisi
+    // explicitement, on n'avance pas plus loin dans la
+    // hiérarchie.
+
+    let allLevelsResolved =
+        true;
+
 
     for (
         let level = 0;
@@ -5356,6 +5363,35 @@ function renderTagMenus() {
         select.innerHTML =
             '';
 
+        // NOUVEAU : option vide, affichant le nom du
+        // tag lui-même, non sélectionnable une fois
+        // qu'une vraie valeur a été choisie plus haut.
+
+       const placeholder =
+            document.createElement(
+                'option'
+            );
+
+        placeholder.value =
+            '';
+
+        placeholder.textContent =
+            activeTags[level] + ' :';
+
+        placeholder.disabled =
+            true;
+
+        placeholder.style.fontWeight =
+            'bold';
+
+        placeholder.style.color =
+            '#4a3022';          // couleur du h1 -- à ajuster si besoin
+
+        select.appendChild(
+            placeholder
+        );
+
+
         values.forEach(value => {
 
             const option =
@@ -5375,6 +5411,12 @@ function renderTagMenus() {
 
         });
 
+
+        // NOUVEAU : si la valeur actuelle n'est plus
+        // valable (changement en amont), on repart sur
+        // le placeholder -- PAS sur la première valeur
+        // de la liste.
+
         if (
             !values.includes(
                 selectedTagValues[level]
@@ -5382,12 +5424,22 @@ function renderTagMenus() {
         ) {
 
             selectedTagValues[level] =
-                values[0];
+                undefined;
 
         }
 
         select.value =
             selectedTagValues[level] || '';
+
+
+        if (selectedTagValues[level] === undefined) {
+
+            allLevelsResolved =
+                false;
+
+            break;
+
+        }
 
     }
 
@@ -5400,6 +5452,23 @@ function renderTagMenus() {
     if (!positionSelect) {
         return;
     }
+
+    if (!allLevelsResolved) {
+
+        // Un niveau est encore sur son placeholder :
+        // pas de liste de positions pour l'instant.
+
+        positionSelect.innerHTML =
+            '';
+
+        updatePositionSubtitle(
+            null
+        );
+
+        return;
+
+    }
+
 
     const matchingPositions =
         filterPositionsBySelections(
