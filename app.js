@@ -1485,6 +1485,14 @@ const ground =
     );
 
 
+ const refreshBoardGeometry = () => ground.redrawAll();
+
+new ResizeObserver(refreshBoardGeometry).observe(document.body);
+new ResizeObserver(refreshBoardGeometry).observe(boardElement);
+window.addEventListener('resize', refreshBoardGeometry);
+window.addEventListener('load', refreshBoardGeometry);
+window.visualViewport?.addEventListener('resize', refreshBoardGeometry);
+
 // ==================================================
 // INDICATEURS DE TRAIT
 // ==================================================
